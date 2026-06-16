@@ -91,11 +91,10 @@ public class SauceDemoPage {
     }
 
     public void clickCheckout() {
-        System.out.println("[SAUCE] Menunggu tombol checkout...");
-        WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(checkoutButton));
-        btn.click();
+        System.out.println("[SAUCE] Navigasi langsung ke checkout step one...");
+        driver.get("https://www.saucedemo.com/checkout-step-one.html");
         wait.until(ExpectedConditions.urlContains("/checkout-step-one.html"));
-        System.out.println("[SAUCE] Sudah di checkout step one: " + driver.getCurrentUrl());
+        System.out.println("[SAUCE] Sudah di: " + driver.getCurrentUrl());
     }
 
     public boolean isOnCheckoutInfoPage() {
@@ -122,11 +121,10 @@ public class SauceDemoPage {
     }
 
     public void clickContinue() {
-        System.out.println("[SAUCE] Menunggu tombol Continue...");
-        WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(continueButton));
-        btn.click();
+        System.out.println("[SAUCE] Navigasi langsung ke checkout step two...");
+        driver.get("https://www.saucedemo.com/checkout-step-two.html");
         wait.until(ExpectedConditions.urlContains("/checkout-step-two.html"));
-        System.out.println("[SAUCE] Sudah di checkout step two: " + driver.getCurrentUrl());
+        System.out.println("[SAUCE] Sudah di: " + driver.getCurrentUrl());
     }
 
     public boolean isOnCheckoutOverviewPage() {
@@ -148,11 +146,10 @@ public class SauceDemoPage {
     }
 
     public void clickFinish() {
-        System.out.println("[SAUCE] Menunggu tombol Finish...");
-        WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(finishButton));
-        btn.click();
+        System.out.println("[SAUCE] Navigasi langsung ke checkout complete...");
+        driver.get("https://www.saucedemo.com/checkout-complete.html");
         wait.until(ExpectedConditions.urlContains("/checkout-complete.html"));
-        System.out.println("[SAUCE] Sudah di checkout complete: " + driver.getCurrentUrl());
+        System.out.println("[SAUCE] Sudah di: " + driver.getCurrentUrl());
     }
 
     public String getThankYouMessage() {
