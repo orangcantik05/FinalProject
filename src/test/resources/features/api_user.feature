@@ -15,7 +15,9 @@ Feature: DummyAPI User Endpoints
 
   @api @positive
   Scenario: GET User by ID - Berhasil mendapatkan detail user
-    When saya mengirim GET request ke "/user/60d0fe4f5311236168a109ca"
+    When saya mengirim GET request ke "/user"
+    And saya menyimpan ID user pertama dari daftar
+    When saya mengirim GET request ke "/user/{createdUserId}"
     Then response status code adalah 200
     And response body mengandung field "id"
     And response body mengandung field "firstName"
