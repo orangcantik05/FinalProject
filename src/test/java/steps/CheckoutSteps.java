@@ -20,6 +20,8 @@ public class CheckoutSteps {
     @When("saya memasukkan username saucedemo {string}")
     public void masukkanUsernameSauce(String username) {
         loginPage = new LoginPage(getDriver());
+        // Inisialisasi sauceDemoPage di sini sekaligus agar tidak null di step berikutnya
+        sauceDemoPage = new SauceDemoPage(getDriver());
         loginPage.enterSauceUsername(username);
         System.out.println("[E2E] Entered username: " + username);
     }
@@ -36,7 +38,6 @@ public class CheckoutSteps {
 
     @Then("saya berada di halaman produk saucedemo")
     public void verifikasiHalamanProduk() {
-        sauceDemoPage = new SauceDemoPage(getDriver());
         boolean isOnPage = sauceDemoPage.isOnInventoryPage();
         System.out.println("[E2E] On inventory page: " + isOnPage);
         assertTrue("Tidak berhasil login ke halaman produk!", isOnPage);
