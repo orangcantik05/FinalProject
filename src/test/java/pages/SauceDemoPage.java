@@ -75,20 +75,8 @@ public class SauceDemoPage {
     }
 
     public void openCart() {
-        System.out.println("[SAUCE] Menunggu cart icon bisa diklik...");
-        try {
-            // Klik elemen <a> di dalam container, bukan div containernya
-            WebElement cartLink = wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("#shopping_cart_container a")
-            ));
-            cartLink.click();
-            System.out.println("[SAUCE] Cart link diklik");
-        } catch (Exception e) {
-            // Fallback: navigasi langsung ke URL cart
-            System.out.println("[SAUCE] Klik gagal, fallback ke driver.get(): " + e.getMessage());
-            driver.get("https://www.saucedemo.com/cart.html");
-        }
-        System.out.println("[SAUCE] Menunggu navigasi ke halaman cart...");
+        System.out.println("[SAUCE] Navigasi langsung ke halaman cart...");
+        driver.get("https://www.saucedemo.com/cart.html");
         wait.until(ExpectedConditions.urlContains("/cart.html"));
         System.out.println("[SAUCE] Sudah di halaman cart: " + driver.getCurrentUrl());
     }
