@@ -1,6 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -28,7 +29,8 @@ public class LoginPage {
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        int timeout = System.getenv("HEADLESS") != null ? 30 : 10;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
     }
 
     public void openPage(String url) {
@@ -60,7 +62,11 @@ public class LoginPage {
     }
 
     public void clickLogout() {
-        wait.until(ExpectedConditions.elementToBeClickable(logoutButton)).click();
+        WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(logoutButton));
+        // Pakai JS click agar lebih reliable di headless CI
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
+        // Tunggu URL pindah ke /login setelah logout
+        wait.until(ExpectedConditions.urlContains("/login"));
     }
 
     // SauceDemo methods
