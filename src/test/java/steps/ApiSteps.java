@@ -47,6 +47,18 @@ public class ApiSteps {
         System.out.println("[API] Response body: " + response.getBody().asString().substring(0, Math.min(200, response.getBody().asString().length())));
     }
 
+    // STEP BARU -- ditambahkan di sini
+    @When("saya menyimpan ID user pertama dari daftar")
+    public void simpanIdUserPertama() {
+        Response listResponse = RestAssured.given()
+                .baseUri(context.getBaseUrl())
+                .header("app-id", context.getAppIdHeader())
+                .get("/user");
+        String firstId = listResponse.jsonPath().getString("data[0].id");
+        context.setCreatedUserId(firstId);
+        System.out.println("[API] First user ID saved: " + firstId);
+    }
+
     @When("saya mengirim POST request ke {string} dengan body:")
     public void kirimPostRequest(String endpoint, String body) {
         String randomEmail = "test" + new Random().nextInt(99999) + "@example.com";
@@ -64,7 +76,6 @@ public class ApiSteps {
         System.out.println("[API] POST " + endpoint + " -> Status: " + response.getStatusCode());
         System.out.println("[API] Response body: " + response.getBody().asString().substring(0, Math.min(200, response.getBody().asString().length())));
 
-        // Save created user ID for later use
         if (response.getStatusCode() == 200) {
             String userId = response.jsonPath().getString("id");
             if (userId != null) {
