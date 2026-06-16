@@ -1,4 +1,4 @@
-package pages;
+ppackage pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -43,19 +43,15 @@ public class SauceDemoPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
     }
 
+    // Try-catch dihapus agar TimeoutException langsung terlempar dengan pesan lengkap
     public boolean isOnInventoryPage() {
-        try {
-            System.out.println("[SAUCE] Menunggu inventory_container muncul...");
-            boolean result = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(inventoryContainer)
-            ).isDisplayed();
-            System.out.println("[SAUCE] inventory_container ditemukan: " + result);
-            return result;
-        } catch (Exception e) {
-            System.out.println("[SAUCE] TIMEOUT di isOnInventoryPage: " + e.getMessage());
-            System.out.println("[SAUCE] URL saat ini: " + driver.getCurrentUrl());
-            return false;
-        }
+        System.out.println("[SAUCE] Menunggu inventory_container muncul...");
+        System.out.println("[SAUCE] URL saat ini: " + driver.getCurrentUrl());
+        boolean result = wait.until(
+            ExpectedConditions.visibilityOfElementLocated(inventoryContainer)
+        ).isDisplayed();
+        System.out.println("[SAUCE] inventory_container ditemukan: " + result);
+        return result;
     }
 
     public void addFirstProductToCart() {
