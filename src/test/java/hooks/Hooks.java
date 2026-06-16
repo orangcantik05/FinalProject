@@ -21,14 +21,21 @@ public class Hooks {
         System.out.println("==============================");
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless=new");
+        // Ganti --headless=new ke --headless biasa, lebih stabil di CI
+        options.addArguments("--headless");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
         options.addArguments("--window-size=1920,1080");
         options.addArguments("--remote-allow-origins=*");
+        // Tambahan untuk stabilitas di CI
+        options.addArguments("--disable-extensions");
+        options.addArguments("--disable-setuid-sandbox");
+        options.addArguments("--disable-web-security");
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
+        // Implicit wait sebagai jaring pengaman tambahan
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
     }
 
     @After(value = "@web or @e2e", order = 1)
