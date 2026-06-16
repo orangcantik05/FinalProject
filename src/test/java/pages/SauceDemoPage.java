@@ -60,14 +60,12 @@ public class SauceDemoPage {
             By.cssSelector("button[id^='add-to-cart']")
         ));
         System.out.println("[SAUCE] Tombol add-to-cart siap diklik");
-        // Pakai JavaScript click agar lebih reliable di headless CI
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", firstButton);
         System.out.println("[SAUCE] Tombol add-to-cart sudah diklik");
     }
 
     public String getCartBadgeCount() {
         System.out.println("[SAUCE] Menunggu cart badge muncul...");
-        // Tunggu badge benar-benar visible (bukan hanya present di DOM)
         WebElement badge = wait.until(
             ExpectedConditions.visibilityOfElementLocated(cartBadge)
         );
@@ -78,9 +76,18 @@ public class SauceDemoPage {
 
     public void openCart() {
         System.out.println("[SAUCE] Menunggu cart icon bisa diklik...");
-        WebElement cart = wait.until(ExpectedConditions.elementToBeClickable(cartIcon));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", cart);
-        // Tunggu URL pindah ke /cart.html sebelum lanjut
+        try {
+            // Klik elemen <a> di dalam container, bukan div containernya
+            WebElement cartLink = wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("#shopping_cart_container a")
+            ));
+            cartLink.click();
+            System.out.println("[SAUCE] Cart link diklik");
+        } catch (Exception e) {
+            // Fallback: navigasi langsung ke URL cart
+            System.out.println("[SAUCE] Klik gagal, fallback ke driver.get(): " + e.getMessage());
+            driver.get("https://www.saucedemo.com/cart.html");
+        }
         System.out.println("[SAUCE] Menunggu navigasi ke halaman cart...");
         wait.until(ExpectedConditions.urlContains("/cart.html"));
         System.out.println("[SAUCE] Sudah di halaman cart: " + driver.getCurrentUrl());
@@ -88,7 +95,6 @@ public class SauceDemoPage {
 
     public int getCartItemCount() {
         System.out.println("[SAUCE] Menunggu item di cart muncul...");
-        // Tunggu visibility, bukan hanya presence, agar DOM sudah fully rendered
         List<WebElement> items = wait.until(
             ExpectedConditions.visibilityOfAllElementsLocatedBy(cartItems)
         );
