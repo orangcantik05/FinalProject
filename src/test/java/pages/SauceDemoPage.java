@@ -14,8 +14,8 @@ public class SauceDemoPage {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    // Inventory / Products page
-    private By inventoryTitle = By.className("title");
+    // Inventory / Products page -- diganti ke id yang unik
+    private By inventoryContainer = By.id("inventory_container");
     private By addToCartButtons = By.cssSelector("button[id^='add-to-cart']");
     private By cartBadge = By.className("shopping_cart_badge");
     private By cartIcon = By.id("shopping_cart_container");
@@ -30,7 +30,7 @@ public class SauceDemoPage {
     private By postalCodeField = By.id("postal-code");
     private By continueButton = By.id("continue");
 
-    // Checkout Step 2
+    // Checkout Step 2 -- tetap pakai className title karena hanya dipakai untuk teks saja
     private By overviewTitle = By.className("title");
     private By finishButton = By.id("finish");
 
@@ -39,13 +39,17 @@ public class SauceDemoPage {
 
     public SauceDemoPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        // Timeout 20 detik saat headless CI, 10 detik saat lokal
+        int timeout = System.getenv("HEADLESS") != null ? 20 : 10;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
     }
 
+    // Diperbaiki -- pakai inventoryContainer yang unik, bukan className "title"
     public boolean isOnInventoryPage() {
         try {
-            WebElement title = wait.until(ExpectedConditions.visibilityOfElementLocated(inventoryTitle));
-            return title.getText().equals("Products");
+            return wait.until(
+                ExpectedConditions.visibilityOfElementLocated(inventoryContainer)
+            ).isDisplayed();
         } catch (Exception e) {
             return false;
         }
