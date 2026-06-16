@@ -3,8 +3,12 @@ package steps;
 import hooks.Hooks;
 import io.cucumber.java.en.*;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.CheckboxPage;
 import pages.LoginPage;
+
+import java.time.Duration;
 
 import static org.junit.Assert.*;
 
@@ -68,6 +72,10 @@ public class LoginSteps {
 
     @Then("saya kembali ke halaman login")
     public void verifikasiKembaliKeLogin() {
+        // Tunggu URL benar-benar pindah ke /login sebelum assertion
+        int timeout = System.getenv("HEADLESS") != null ? 30 : 10;
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(timeout));
+        wait.until(ExpectedConditions.urlContains("/login"));
         String url = loginPage.getCurrentUrl();
         System.out.println("[WEB] After logout URL: " + url);
         assertTrue("Tidak kembali ke halaman login!", url.contains("/login"));
