@@ -43,7 +43,6 @@ public class SauceDemoPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
     }
 
-    // Try-catch dihapus agar TimeoutException langsung terlempar dengan pesan lengkap
     public boolean isOnInventoryPage() {
         System.out.println("[SAUCE] Menunggu inventory_container muncul...");
         System.out.println("[SAUCE] URL saat ini: " + driver.getCurrentUrl());
@@ -55,12 +54,15 @@ public class SauceDemoPage {
     }
 
     public void addFirstProductToCart() {
-        System.out.println("[SAUCE] Menunggu tombol add-to-cart muncul...");
-        List<WebElement> buttons = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(addToCartButtons));
-        System.out.println("[SAUCE] Jumlah tombol add-to-cart: " + buttons.size());
-        if (!buttons.isEmpty()) {
-            buttons.get(0).click();
-        }
+        System.out.println("[SAUCE] Menunggu tombol add-to-cart siap diklik...");
+        // Ganti presenceOfAllElementsLocatedBy ke elementToBeClickable
+        // agar tombol benar-benar siap sebelum diklik
+        WebElement firstButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("button[id^='add-to-cart']")
+        ));
+        System.out.println("[SAUCE] Tombol add-to-cart siap diklik");
+        firstButton.click();
+        System.out.println("[SAUCE] Tombol add-to-cart sudah diklik");
     }
 
     public String getCartBadgeCount() {
