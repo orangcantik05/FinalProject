@@ -1,0 +1,74 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Selenium
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.18.1'
+
+    // WebDriverManager
+    testImplementation 'io.github.bonigarcia:webdrivermanager:5.7.0'
+
+    // Cucumber
+    testImplementation 'io.cucumber:cucumber-java:7.15.0'
+    testImplementation 'io.cucumber:cucumber-junit:7.15.0'
+
+    // JUnit
+    testImplementation 'junit:junit:4.13.2'
+
+    // Rest Assured for API Testing
+    testImplementation 'io.rest-assured:rest-assured:5.4.0'
+    testImplementation 'io.rest-assured:json-path:5.4.0'
+
+    // Cucumber Reporting
+    testImplementation 'net.masterthought:cucumber-reporting:5.8.1'
+
+    // Jackson for JSON
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
+
+    // SLF4J
+    testImplementation 'org.slf4j:slf4j-simple:2.0.12'
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+test {
+    useJUnit()
+    systemProperty 'cucumber.plugin', 'pretty,json:build/reports/cucumber/cucumber.json,html:build/reports/cucumber/cucumber-html-report,junit:build/reports/cucumber/junit-report.xml'
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+task cucumber() {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty',
+                    '--plugin', 'json:build/reports/cucumber/cucumber.json',
+                    '--plugin', 'html:build/reports/cucumber/cucumber-html-report',
+                    '--glue', 'steps',
+                    '--glue', 'hooks',
+                    'src/test/resources/features']
+        }
+    }
+}
+
+task generateCucumberReport(type: JavaExec) {
+    dependsOn test
+    classpath = configurations.testRuntimeClasspath + sourceSets.test.output
+    mainClass = 'runners.GenerateCucumberReport'
+}
