@@ -93,7 +93,9 @@ public class SauceDemoPage {
     public void clickCheckout() {
         System.out.println("[SAUCE] Menunggu tombol checkout...");
         WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(checkoutButton));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
+        btn.click();
+        wait.until(ExpectedConditions.urlContains("/checkout-step-one.html"));
+        System.out.println("[SAUCE] Sudah di checkout step one: " + driver.getCurrentUrl());
     }
 
     public boolean isOnCheckoutInfoPage() {
@@ -122,7 +124,9 @@ public class SauceDemoPage {
     public void clickContinue() {
         System.out.println("[SAUCE] Menunggu tombol Continue...");
         WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(continueButton));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
+        btn.click();
+        wait.until(ExpectedConditions.urlContains("/checkout-step-two.html"));
+        System.out.println("[SAUCE] Sudah di checkout step two: " + driver.getCurrentUrl());
     }
 
     public boolean isOnCheckoutOverviewPage() {
@@ -146,7 +150,9 @@ public class SauceDemoPage {
     public void clickFinish() {
         System.out.println("[SAUCE] Menunggu tombol Finish...");
         WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(finishButton));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
+        btn.click();
+        wait.until(ExpectedConditions.urlContains("/checkout-complete.html"));
+        System.out.println("[SAUCE] Sudah di checkout complete: " + driver.getCurrentUrl());
     }
 
     public String getThankYouMessage() {
